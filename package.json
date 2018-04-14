@@ -1,6 +1,6 @@
 {
   "name": "funky-jwt",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Native JWT validation without deps",
   "main": "index.js",
   "scripts": {
