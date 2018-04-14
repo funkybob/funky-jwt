@@ -76,13 +76,14 @@ class JWT {
 	}
 
 	async get_key (kid) {
-		if (this.options.keys[kid] === undefined) {
+		if (this.options.keys[kid] === undefined && this.options.hostname) {
 			let resp = await fetch(`https://${this.options.hostname}/.well-known/jwks.json`)
 				.then(resp => resp.json())
 			resp.keys.forEach(k => this.options.keys[k.kid] = k);
 		}
 
 		let jwk = this.options.keys[kid];
+		if (jwk === undefined) return Promise.reject('Unknown key');
 		return crypto.subtle.importKey('jwk', jwk, algoParams[jwk.alg], false, ['verify']);
 	}
 
