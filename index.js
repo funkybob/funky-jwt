@@ -74,8 +74,15 @@ class JWT {
 		}
 		if (!valid) throw new Error("Invalid signature");
 
-		if (this.options.aud && this.options.aud !== this.message.aud)
-			throw new Error("Invalid audience");
+		if (this.options.aud) {
+			if (Array.isArray(this.message.aud)) {
+				if (!this.message.aud.includes(this.options.aud))
+					throw new Error("Invalid audience");
+			} else {
+				if (this.options.aud !== this.message.aud)
+					throw new Error("Invalid audience");
+			}
+		}
 
 		let now = Math.floor(new Date().getTime() / 1000);
 		if (this.message.exp && this.message.exp < now)
