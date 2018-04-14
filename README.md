@@ -7,12 +7,12 @@ validate JWT, even those signed using RS256.
 Usage
 -----
 
-let jwt = new JWT(token, options);
-try {
-    jwt.is_valid()
-} catch {
-    // :(
-};
+    let jwt = new JWT(token, options);
+    try {
+        jwt.is_valid()
+    } catch {
+        // :(
+    };
 
 
 Options
