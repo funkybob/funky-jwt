@@ -12,6 +12,11 @@ let b64d = (v) => {
 	return atob(v.replace(/-/g, '+').replace(/_/g, '/'))
 }
 
+let b64e = (v) => {
+	return btoa(v).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+
 // String to ArrayBuffer
 let s2b = (v) => {
 	let buff = new Uint8Array(new ArrayBuffer(v.length));
@@ -48,7 +53,8 @@ class JWT {
 
 	is_valid () {
 		if (this.header.typ !== 'JWT') throw new Error("Not a JWT!");
-		if (this.header.alg !== this.options.alg) throw new Error("Unsupported algorithm");
+		// TODO: Support a list of acceptable algs?
+		if (this.header.alg && this.header.alg !== this.options.alg) throw new Error("Unsupported algorithm");
 
 		let content = this.parts.splice(0, 2).join('.');
 		let valid;
@@ -56,12 +62,12 @@ class JWT {
 		case 'RS256':
 		case 'RS384':
 		case 'RS512':
-			valid = await this.verify_rs256(content);
+			valid = this.verify_rs256(content);
 			break;
 		case 'HS256':
 		case 'HS384':
 		case 'HS512':
-			valid = await this.verify_hs245(content);
+			valid = this.verify_hs256(content);
 			break;
 		default:
 			throw new Error("Unsupported algorithm");
@@ -106,4 +112,8 @@ class JWT {
 	async get_hmac_key (secret) {
 		return crypto.subtle.importKey('raw', s2b(b64d(secret)), algoParams[this.header.alg], false, ['verify']);
 	}
+}
+
+export {
+	JWT
 }
