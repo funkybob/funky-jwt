@@ -25,8 +25,11 @@ const defaultOptions = {
 }
 
 const algoParams = {
-	'RS256': {name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256'}
-	'RS384': {name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-384'}
+	'HS256': {name: 'HMAC', hash: 'SHA-256'},
+	'HS384': {name: 'HMAC', hash: 'SHA-384'},
+	'HS512': {name: 'HMAC', hash: 'SHA-512'},
+	'RS256': {name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256'},
+	'RS384': {name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-384'},
 	'RS512': {name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-512'}
 }
 
@@ -53,7 +56,12 @@ class JWT {
 		case 'RS256':
 		case 'RS384':
 		case 'RS512':
-			valid = this.verify_rs256(content);
+			valid = await this.verify_rs256(content);
+			break;
+		case 'HS256':
+		case 'HS384':
+		case 'HS512':
+			valid = await this.verify_hs245(content);
 			break;
 		default:
 			throw new Error("Unsupported algorithm");
@@ -74,12 +82,11 @@ class JWT {
 	}
 
 	async verify_rs256 (content) {
-		let key = await this.get_key(this.header.kid);
-
-		return crypto.subtle.verify(algoParams[this.header.algo], key, s2b(this.signature), s2b(content));
+		let key = await this.get_rs_key(this.header.kid);
+		return crypto.subtle.verify(algoParams[this.header.alg], key, s2b(this.signature), s2b(content));
 	}
 
-	async get_key (kid) {
+	async get_rs_key (kid) {
 		if (this.options.keys[kid] === undefined && this.options.hostname) {
 			let resp = await fetch(`https://${this.options.hostname}/.well-known/jwks.json`)
 				.then(resp => resp.json())
@@ -91,4 +98,12 @@ class JWT {
 		return crypto.subtle.importKey('jwk', jwk, algoParams[jwk.alg], false, ['verify']);
 	}
 
+	async verify_hs256 (content) {
+		let key = await this.get_hmac_key(this.options.secret)
+		return crypto.subtle.verify(algoParams[this.header.alg], key, s2b(this.signature), s2b(content));
+	}
+
+	async get_hmac_key (secret) {
+		return crypto.subtle.importKey('raw', s2b(b64d(secret)), algoParams[this.header.alg], false, ['verify']);
+	}
 }
