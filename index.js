@@ -26,6 +26,8 @@ const defaultOptions = {
 
 const algoParams = {
 	'RS256': {name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256'}
+	'RS384': {name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-384'}
+	'RS512': {name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-512'}
 }
 
 class JWT {
@@ -49,6 +51,8 @@ class JWT {
 		let valid;
 		switch(this.header.alg) {
 		case 'RS256':
+		case 'RS384':
+		case 'RS512':
 			valid = this.verify_rs256(content);
 			break;
 		default:
@@ -72,7 +76,7 @@ class JWT {
 	async verify_rs256 (content) {
 		let key = await this.get_key(this.header.kid);
 
-		return crypto.subtle.verify(algoParams['RS256'], key, s2b(this.signature), s2b(content));
+		return crypto.subtle.verify(algoParams[this.header.algo], key, s2b(this.signature), s2b(content));
 	}
 
 	async get_key (kid) {
