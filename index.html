@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title> JWT Test </title>
+    <script src="index.js"></script>
+  </head>
+  <body>
+    <label> Paste JWT here </label>
+    <textarea></textarea>
+    <button type="button"> Check </button>
+    <p></p>
+    <script>
+document.querySelector('button').addEventListener('click', ev => {
+  let token = document.querySelector('textarea').value.trim();
+  let jwt = new JWT(token, {hostname: 'travelanalytics.au.auth0.com'});
+  console.log(jwt);
+  document.querySelector('p').innerHTML = jwt.is_valid();
+})
+    </script>
+  </body>
+</html>
