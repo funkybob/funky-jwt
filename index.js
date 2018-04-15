@@ -102,7 +102,7 @@ class JWT {
 		if (this.message.nbf && this.message.nbf > now)
 			throw new Error("Token not yet valid");
 
-		return this;
+		return true;
 	}
 
 	async verify_rs256 (content) {
