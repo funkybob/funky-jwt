@@ -32,7 +32,7 @@ Usage
     try {
         valid = await jwt.is_valid()
     } catch(err) {
-    	valid = false;
+        valid = false;
     };
 
 
