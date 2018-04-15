@@ -38,6 +38,14 @@ const algoParams = {
 	'RS512': {name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-512'}
 }
 
+async function fetchKeys (hostname) {
+	let resp = await fetch(`https://${hostname}/.well-known/jwks.json`)
+		.then(resp => resp.json())
+
+	return resp.keys.reduce((acc, val) => {acc[val.kid] = val; return acc;}, {});
+}
+
+
 class JWT {
 
 	constructor (token, options) {
@@ -74,6 +82,9 @@ class JWT {
 		}
 		if (!valid) throw new Error("Invalid signature");
 
+		if (this.options.iss && this.options.iss !== this.message.iss)
+			throw new Error("Unrecognised issuer")
+
 		if (this.options.aud) {
 			if (Array.isArray(this.message.aud)) {
 				if (!this.message.aud.includes(this.options.aud))
@@ -88,8 +99,8 @@ class JWT {
 		if (this.message.exp && this.message.exp < now)
 			throw new Error("Token has expired");
 
-		if (this.message.iat && this.message.iat > now)
-			throw new Error("Issue in future");
+		if (this.message.nbf && this.message.nbf > now)
+			throw new Error("Token not yet valid");
 
 		return true;
 	}
@@ -99,13 +110,7 @@ class JWT {
 		return crypto.subtle.verify(algoParams[this.header.alg], key, s2b(this.signature), s2b(content));
 	}
 
-	async get_rs_key (kid) {
-		if (this.options.keys[kid] === undefined && this.options.hostname) {
-			let resp = await fetch(`https://${this.options.hostname}/.well-known/jwks.json`)
-				.then(resp => resp.json())
-			resp.keys.forEach(k => this.options.keys[k.kid] = k);
-		}
-
+	get_rs_key (kid) {
 		let jwk = this.options.keys[kid];
 		if (jwk === undefined) return Promise.reject('Unknown key');
 		return crypto.subtle.importKey('jwk', jwk, algoParams[jwk.alg], false, ['verify']);
@@ -116,11 +121,12 @@ class JWT {
 		return crypto.subtle.verify(algoParams[this.header.alg], key, s2b(this.signature), s2b(content));
 	}
 
-	async get_hmac_key (secret) {
+	get_hmac_key (secret) {
 		return crypto.subtle.importKey('raw', s2b(b64d(secret)), algoParams[this.header.alg], false, ['verify']);
 	}
 }
 
 export {
-	JWT
+	JWT,
+	fetchKeys
 }
