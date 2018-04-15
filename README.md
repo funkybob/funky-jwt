@@ -28,10 +28,11 @@ Usage
 -----
 
     let jwt = new JWT(token, options);
+    let valid;
     try {
-        jwt.is_valid()
-    } catch {
-        // :(
+        valid = await jwt.is_valid()
+    } catch(err) {
+    	valid = false;
     };
 
 
