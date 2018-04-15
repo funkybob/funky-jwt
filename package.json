@@ -1,5 +1,5 @@
 {
-  "name": "funky-jwt",
+  "name": "@funkybob/jwt",
   "version": "1.1.1",
   "description": "Native JWT validation without deps",
   "main": "index.js",
@@ -8,8 +8,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/funkybob/funky-jwt.git"
+    "url": "git+https://github.com/funkybob/funky-jwt.git"
   },
   "author": "Curtis Maloney",
-  "license": "MIT"
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/funkybob/funky-jwt/issues"
+  },
+  "homepage": "https://github.com/funkybob/funky-jwt#readme"
 }
