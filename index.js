@@ -59,7 +59,7 @@ class JWT {
 		this.signature = signature
 	}
 
-	is_valid () {
+	async is_valid () {
 		if (this.header.typ !== 'JWT') throw new Error("Not a JWT!");
 		// TODO: Support a list of acceptable algs?
 		if (this.header.alg && this.header.alg !== this.options.alg) throw new Error("Unsupported algorithm");
@@ -70,12 +70,12 @@ class JWT {
 		case 'RS256':
 		case 'RS384':
 		case 'RS512':
-			valid = this.verify_rs256(content);
+			valid = await this.verify_rs256(content);
 			break;
 		case 'HS256':
 		case 'HS384':
 		case 'HS512':
-			valid = this.verify_hs256(content);
+			valid = await this.verify_hs256(content);
 			break;
 		default:
 			throw new Error("Unsupported algorithm");
@@ -102,11 +102,11 @@ class JWT {
 		if (this.message.nbf && this.message.nbf > now)
 			throw new Error("Token not yet valid");
 
-		return true;
+		return this;
 	}
 
 	async verify_rs256 (content) {
-		let key = await this.get_rs_key(this.header.kid);
+		let key = await this.get_rs_key(this.header.kid)
 		return crypto.subtle.verify(algoParams[this.header.alg], key, s2b(this.signature), s2b(content));
 	}
 
