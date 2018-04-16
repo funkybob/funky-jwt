@@ -1,9 +1,7 @@
-/*
-TODO : Comply with sequence in https://tools.ietf.org/html/rfc7519#section-7.2
-*/
+/* TODO : Comply with sequence in https://tools.ietf.org/html/rfc7519#section-7.2 */
 
 // Base64Url decode
-let b64d = (v) => {
+function b64d (v) {
 	switch(v.length % 4) {
 		case 3: v = v + '='; break;
 		case 2: v = v + '=='; break;
@@ -12,17 +10,11 @@ let b64d = (v) => {
 	return atob(v.replace(/-/g, '+').replace(/_/g, '/'))
 }
 
-let b64e = (v) => {
+function b64e (v) {
 	return btoa(v).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
 
-
-// String to ArrayBuffer
-let s2b = (v) => {
-	let buff = new Uint8Array(new ArrayBuffer(v.length));
-	buff.set(Array.from(v).map(x => x.charCodeAt(0)))
-	return buff;
-}
+let encoder = new TextEncoder('utf-8');
 
 const defaultOptions = {
 	alg: 'RS256',
@@ -107,7 +99,7 @@ class JWT {
 
 	async verify_rs256 (content) {
 		let key = await this.get_rs_key(this.header.kid)
-		return crypto.subtle.verify(algoParams[this.header.alg], key, s2b(this.signature), s2b(content));
+		return crypto.subtle.verify(algoParams[this.header.alg], key, encoder.encode(this.signature), encoder.encode(content));
 	}
 
 	get_rs_key (kid) {
@@ -118,11 +110,11 @@ class JWT {
 
 	async verify_hs256 (content) {
 		let key = await this.get_hmac_key(this.options.secret)
-		return crypto.subtle.verify(algoParams[this.header.alg], key, s2b(this.signature), s2b(content));
+		return crypto.subtle.verify(algoParams[this.header.alg], key, encoder.encode(this.signature), encoder.encode(content));
 	}
 
 	get_hmac_key (secret) {
-		return crypto.subtle.importKey('raw', s2b(b64d(secret)), algoParams[this.header.alg], false, ['verify']);
+		return crypto.subtle.importKey('raw', encoder.encode(b64d(secret)), algoParams[this.header.alg], false, ['verify']);
 	}
 }
 
