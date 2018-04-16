@@ -62,12 +62,12 @@ class JWT {
         case 'RS256':
         case 'RS384':
         case 'RS512':
-            valid = await this.verify_rs256(content);
+            valid = await this.verify_rsa(content);
             break;
         case 'HS256':
         case 'HS384':
         case 'HS512':
-            valid = await this.verify_hs256(content);
+            valid = await this.verify_hmac(content);
             break;
         default:
             throw new Error("Unsupported algorithm");
@@ -97,7 +97,7 @@ class JWT {
         return true;
     }
 
-    async verify_rs256 (content) {
+    async verify_rsa (content) {
         let key = await this.get_rs_key(this.header.kid)
         return crypto.subtle.verify(algoParams[this.header.alg], key, encoder.encode(this.signature), encoder.encode(content));
     }
@@ -108,7 +108,7 @@ class JWT {
         return crypto.subtle.importKey('jwk', jwk, algoParams[jwk.alg], false, ['verify']);
     }
 
-    async verify_hs256 (content) {
+    async verify_hmac (content) {
         let key = await this.get_hmac_key(this.options.secret)
         return crypto.subtle.verify(algoParams[this.header.alg], key, encoder.encode(this.signature), encoder.encode(content));
     }
