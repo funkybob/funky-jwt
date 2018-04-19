@@ -39,12 +39,20 @@ Usage
 Options
 -------
 
- - hostname : used to retrieve public JWK from well known URI.
  - secret : Base64Url encoded secret for HS algorithms.
  - keys: known JWK objects for RS algorithms.
  - alg : specify to restrict acceptable algorithm.
  - aud : specify to validate the audience claim.
  - iss : specify to only accept tokens from this issuer.
+
+Properties
+----------
+
+  token - the original token value
+  parts - the token split by '.'
+  header - the decoded header fields
+  message - the decoded message fields
+  signature - the raw signature
 
 Loading Keys
 ------------

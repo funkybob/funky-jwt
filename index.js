@@ -14,6 +14,13 @@ function b64e (v) {
     return btoa(v).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
 
+// String to ArrayBuffer
+function bytes (v) {
+        let buff = new Uint8Array(new ArrayBuffer(v.length));
+        buff.set(Array.from(v).map(x => x.charCodeAt(0)))
+        return buff;
+}
+
 let encoder = new TextEncoder('utf-8');
 
 const defaultOptions = {
@@ -99,7 +106,7 @@ class JWT {
 
     async verify_rsa (content) {
         let key = await this.get_rs_key(this.header.kid)
-        return crypto.subtle.verify(algoParams[this.header.alg], key, encoder.encode(this.signature), encoder.encode(content));
+        return crypto.subtle.verify(algoParams[this.header.alg], key, bytes(this.signature), encoder.encode(content));
     }
 
     get_rs_key (kid) {
@@ -110,7 +117,7 @@ class JWT {
 
     async verify_hmac (content) {
         let key = await this.get_hmac_key(this.options.secret)
-        return crypto.subtle.verify(algoParams[this.header.alg], key, encoder.encode(this.signature), encoder.encode(content));
+        return crypto.subtle.verify(algoParams[this.header.alg], key, bytes(this.signature), encoder.encode(content));
     }
 
     get_hmac_key (secret) {
