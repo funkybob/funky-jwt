@@ -48,11 +48,11 @@ Options
 Properties
 ----------
 
-  token - the original token value
-  parts - the token split by '.'
-  header - the decoded header fields
-  message - the decoded message fields
-  signature - the raw signature
+ - token: the original token value
+ - parts: the token split by '.'
+ - header: the decoded header fields
+ - message: the decoded message fields
+ - signature: the raw signature
 
 Loading Keys
 ------------
