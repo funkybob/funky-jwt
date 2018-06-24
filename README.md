@@ -96,7 +96,7 @@ Modules
 verify
 --------
 
-## decode(token)
+# decode(token)
 
 Decodes a JWT string into an Object:
 
@@ -106,7 +106,7 @@ Decodes a JWT string into an Object:
  - parts : the token split by '.'
  - token : the original token string
 
-## async isValid(jwt, {alg, iss, aud, secret, keys})
+# async isValid(jwt, {alg, iss, aud, secret, keys})
 
  - alg: signature algorithm
  - aud: audience (Optional)
