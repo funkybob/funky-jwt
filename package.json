@@ -2,7 +2,7 @@
   "name": "@funkybob/jwt",
   "version": "2.0.0",
   "description": "Native JWT validation without deps",
-  "main": "index.js",
+  "browser": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -15,5 +15,16 @@
   "bugs": {
     "url": "https://github.com/funkybob/funky-jwt/issues"
   },
-  "homepage": "https://github.com/funkybob/funky-jwt#readme"
+  "homepage": "https://github.com/funkybob/funky-jwt#readme",
+  "devDependencies": {
+    "esdoc": "^1.1.0",
+    "esdoc-standard-plugin": "^1.0.0"
+  },
+  "esdoc": {
+    "source": "./src",
+    "destination": "./docs",
+    "plugins": [
+      {"name": "esdoc-standard-plugin"}
+    ]
+  }
 }

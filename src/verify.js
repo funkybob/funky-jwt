@@ -4,6 +4,11 @@ import { algoParams, importKey } from "./crypto.js"
 
 let encoder = new TextEncoder('utf-8');
 
+/**
+ * @desc Parse and decode a JWT
+ * @param {String} token
+ * @returns {Object} jwt
+ */
 export function decode(token) {
     let parts = token.split('.')
     let [header, claims, signature] = parts.map(b64d);
@@ -16,8 +21,18 @@ export function decode(token) {
     }
 }
 
+/**
+ * @param {Object} jwt - Token as decoded by decode
+ * @param {Object} config
+ * @param {String} config.alg - Allowed algorithm for signature
+ * @param {String} [config.iss] - Issuer
+ * @param {String} [config.aud] - Audience
+ * @param {String} [config.secret] - Secret, for HS* algorithms
+ * @param {Object} [config.keys] - Keys, for RS* algorithms
+ * @returns {Boolean}
+ * @throws {Error}
+ */
 export async function verify(jwt, { alg, iss, aud, secret, keys }) {
-
     if (jwt.header.typ !== 'JWT') throw new Error("Not a JWT")
     if (jwt.header.alg !== alg) throw new Error("Unsupported algorithm")
 

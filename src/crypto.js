@@ -7,6 +7,12 @@ export const algoParams = {
     'RS512': {name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-512'}
 }
 
+/**
+ * @desc Load key matter as a CryptoKey object, suitable for the supplied algorithm.
+ * @param {String} alg - JWT Algorithm type.
+ * @param {String|Object} key - Key matter
+ * @returns {CryptoKey}
+ */
 export function importKey (alg, key) {
     let keyFmt = (alg.slice(0, 2) === 'HS') ? 'raw' : 'jwk'
     return crypto.subtle.importKey(keyFmt, key, algoParams[alg], false, ['verify']);

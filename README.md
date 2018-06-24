@@ -27,7 +27,7 @@ Note: RS algorithms only support keys in JWK format, currently.
 Usage
 -----
 
-    import {decode, verify} from "@funkybob/jwt/verify.js"
+    import {decode, verify} from "@funkybob/jwt"
 
     let jwt = decode(token);
     let valid;
