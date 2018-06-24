@@ -27,34 +27,15 @@ Note: RS algorithms only support keys in JWK format, currently.
 Usage
 -----
 
-    import {JWT} from "@funkybob/jwt/verify.js"
+    import {decode, verify} from "@funkybob/jwt/verify.js"
 
-    let jwt = new JWT(token, options);
+    let jwt = decode(token);
     let valid;
     try {
-        valid = await jwt.isValid()
+        valid = await verify(jwt, options)
     } catch(err) {
         valid = false;
     };
-
-
-Options
--------
-
- - secret : Base64Url encoded secret for HS algorithms.
- - keys: known JWK objects for RS algorithms.
- - alg : specify to restrict acceptable algorithm.
- - aud : specify to validate the audience claim.
- - iss : specify to only accept tokens from this issuer.
-
-Properties
-----------
-
- - token: the original token value
- - parts: the token split by '.'
- - header: the decoded header fields
- - message: the decoded message fields
- - signature: the raw signature
 
 Loading Keys
 ------------
@@ -112,38 +93,7 @@ The tokens 'nbf' claim is in the future.
 Modules
 =======
 
-crypto
-------
-
-# function importKey (alg, key)
-
-Imports the key matter as appropriate for the specified algorithm.
-
-keys
-----
-
-# fetchKeys (hostname)
-
-util
-----
-
-# function b64d (v)
-
-base64url decode 'v'
-
-# function b64e (v)
-
-base64url encode 'v'
-
-# function str2bytes (v)
-
-Converts 'v' from a String to a Uint8Array.
-
-# function bytes2str (v)
-
-Converts 'v' from a Uint8Array to a String
-
-verifier
+verify
 --------
 
 ## decode(token)
@@ -174,19 +124,36 @@ Check if a jwt is valid.
  - if the token claims an "exp", ensure it's after now.
  - if the token claims a "nbf", ensure it's before now.
 
+keys
+----
 
-verify
+# fetchKeys (hostname)
+
+Fetches keys from `https://${hostname}/.well-known/jwks.json`, then assembles them into
+an Object by Key ID (kid).
+
+crypto
 ------
 
-# class JWT(token, options)
+# function importKey (alg, key)
 
-Options:
+Imports the key matter as appropriate for the specified algorithm.
 
- - secret : Base64Url encoded secret for HS algorithms.
- - keys: known JWK objects for RS algorithms.
- - alg : specify to restrict acceptable algorithm.
- - aud : specify to validate the audience claim.
- - iss : specify to only accept tokens from this issuer.
+util
+----
 
+# function b64d (v)
 
-# async isValid ()
+base64url decode 'v'
+
+# function b64e (v)
+
+base64url encode 'v'
+
+# function str2bytes (v)
+
+Converts 'v' from a String to a Uint8Array.
+
+# function bytes2str (v)
+
+Converts 'v' from a Uint8Array to a String
