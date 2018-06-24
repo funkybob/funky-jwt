@@ -15,10 +15,10 @@ document.querySelector('button').addEventListener('click', ev => {
     alg: 'HS256',
     secret: 'qwertyuiopasdfghjklzxcvbnm123456'
   })
-  old.is_valid().then(result => target.innerHTML = target.innerHTML + result)
+  old.isValid().then(result => target.innerHTML = target.innerHTML + result)
 
   let jwt = ver.decode(token)
-  ver.is_valid(jwt).then(result => target.innerHTML = target.innerHTML + result)
+  ver.isValid(jwt).then(result => target.innerHTML = target.innerHTML + result)
 
 })
 

@@ -7,7 +7,7 @@ export const algoParams = {
     'RS512': {name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-512'}
 }
 
-export function import_key (alg, key) {
+export function importKey (alg, key) {
     let keyFmt = (alg.slice(0, 2) === 'HS') ? 'raw' : 'jwk'
     return crypto.subtle.importKey(keyFmt, key, algoParams[alg], false, ['verify']);
 }

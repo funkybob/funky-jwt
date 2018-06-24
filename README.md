@@ -14,8 +14,8 @@ Supported Algorithms
  - RS384
  - RS512
 
-Supported Claims
-----------------
+Verified Claims
+---------------
 
  - aud
  - iss
@@ -27,10 +27,12 @@ Note: RS algorithms only support keys in JWK format, currently.
 Usage
 -----
 
+    import {JWT} from "@funkybob/jwt/verify.js"
+
     let jwt = new JWT(token, options);
     let valid;
     try {
-        valid = await jwt.is_valid()
+        valid = await jwt.isValid()
     } catch(err) {
         valid = false;
     };
@@ -105,3 +107,89 @@ The tokens 'exp' claim is in the past.
 "Token not yet valid"
 
 The tokens 'nbf' claim is in the future.
+
+
+Modules
+=======
+
+crypto
+------
+
+# function importKey (alg, key)
+
+Imports the key matter as appropriate for the specified algorithm.
+
+keys
+----
+
+# fetchKeys (hostname)
+
+util
+----
+
+# function b64d (v)
+
+base64url decode 'v'
+
+# function b64e (v)
+
+base64url encode 'v'
+
+# function str2bytes (v)
+
+Converts 'v' from a String to a Uint8Array.
+
+# function bytes2str (v)
+
+Converts 'v' from a Uint8Array to a String
+
+# class verifier({ alg, iss, aud })
+
+Construct a token verifier.
+
+## async setSecret(secret)
+
+Sets the secret for this verifier.
+
+## async setKeys(keys)
+
+Sets the map of (kid -> JWK) for this verifier.
+
+## decode(token)
+
+Decodes a JWT string into an Object:
+
+ - header : the JSON decoded content of the header part of the token.
+ - claims : the JSON decoded content of the claims part of the token.
+ - signature : the signature from the token
+ - parts : the token split by '.'
+ - token : the original token string
+
+## async isValid(jwt)
+
+Check if a jwt is valid.
+
+ - verifies header.typ is 'JWT'
+ - verifies the algorithm matches what we accept.
+ - verifies the signature matches
+ - if an "iss" is specified on the verifier, verify it matches.
+ - if an "aud" is specified on the verifier, verify it matches.
+ - if the token claims an "exp", ensure it's after now.
+ - if the token claims a "nbf", ensure it's before now.
+
+
+verify
+------
+
+# class JWT(token, options)
+
+Options:
+
+ - secret : Base64Url encoded secret for HS algorithms.
+ - keys: known JWK objects for RS algorithms.
+ - alg : specify to restrict acceptable algorithm.
+ - aud : specify to validate the audience claim.
+ - iss : specify to only accept tokens from this issuer.
+
+
+# async isValid ()

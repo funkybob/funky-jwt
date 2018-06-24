@@ -3,7 +3,7 @@ import { b64e } from "./util.js"
 
 let encoder = new TextEncoder('utf-8');
 
-export function sign_jwt(header, body, options) {
+export function signJwt(header, body, options) {
     let msg = encoder.encode(JSON.stringify(body))
     let msg = b64e(msg)
     if (!header.typ) {

@@ -1,6 +1,6 @@
 
 import { b64d, str2bytes } from "./util.js"
-import { algoParams, import_key } from "./crypto.js"
+import { algoParams, importKey } from "./crypto.js"
 
 let encoder = new TextEncoder('utf-8');
 
@@ -14,12 +14,12 @@ class verifier {
     }
 
     async setSecret(secret) {
-        this.secret = await import_key(this.alg, encoder.encode(secret))
+        this.secret = await importKey(this.alg, encoder.encode(secret))
     }
 
     async setKeys(keys) {
         for (let kid in keys) {
-            this.keys[kid] = await import_key(this.alg, keys[kid])
+            this.keys[kid] = await importKey(this.alg, keys[kid])
         }
     }
 
@@ -35,7 +35,7 @@ class verifier {
         }
     }
 
-    async is_valid(jwt) {
+    async isValid(jwt) {
         if (jwt.header.typ !== 'JWT') return "Not a JWT"
         if (this.alg && jwt.header.alg !== this.alg) return "Unsupported algorithm"
 
@@ -80,11 +80,4 @@ class verifier {
 
         return true
     }
-}
-
-export async function makeVerifier({ alg, iss, aud, secret, keys }) {
-    const ver = new verifier({alg, iss, aud})
-    if (secret) await ver.setSecret(secret);
-    if (keys) await ver.setKeys(keys);
-    return ver
 }

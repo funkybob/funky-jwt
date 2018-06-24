@@ -1,6 +1,6 @@
 /* TODO : Comply with sequence in https://tools.ietf.org/html/rfc7519#section-7.2 */
 import { b64d, str2bytes } from "./util.js"
-import { algoParams, import_key } from "./crypto.js"
+import { algoParams, importKey } from "./crypto.js"
 
 let encoder = new TextEncoder('utf-8');
 
@@ -22,7 +22,7 @@ export class JWT {
         this.signature = signature
     }
 
-    async is_valid () {
+    async isValid () {
         if (this.header.typ !== 'JWT') throw new Error("Not a JWT!");
         // TODO: Support a list of acceptable algs?
         if (this.options.alg && this.header.alg !== this.options.alg) throw new Error("Unsupported algorithm");
@@ -33,12 +33,12 @@ export class JWT {
         case 'RS256':
         case 'RS384':
         case 'RS512':
-            valid = await this.verify_rsa(content);
+            valid = await this.verifyRSA(content);
             break;
         case 'HS256':
         case 'HS384':
         case 'HS512':
-            valid = await this.verify_hmac(content);
+            valid = await this.verifyHMAC(content);
             break;
         default:
             throw new Error("Unknown algorithm");
@@ -68,15 +68,15 @@ export class JWT {
         return true;
     }
 
-    async verify_rsa (content) {
+    async verifyRSA (content) {
         let jwk = this.options.keys[kid];
         if (jwk === undefined) return Promise.reject('Unknown key');
-        let key = await import_key(jwk.alg, jwk)
+        let key = await importKey(jwk.alg, jwk)
         return crypto.subtle.verify(algoParams[this.header.alg], key, str2bytes(this.signature), encoder.encode(content));
     }
 
-    async verify_hmac (content) {
-        let key = await import_key(this.options.alg, encoder.encode(this.options.secret))
+    async verifyHMAC (content) {
+        let key = await importKey(this.options.alg, encoder.encode(this.options.secret))
         return crypto.subtle.verify(algoParams[this.header.alg], key, str2bytes(this.signature), encoder.encode(content));
     }
 }
