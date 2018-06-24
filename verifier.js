@@ -4,7 +4,7 @@ import { algoParams, importKey } from "./crypto.js"
 
 let encoder = new TextEncoder('utf-8');
 
-class verifier {
+export class verifier {
     constructor({ alg, iss, aud }) {
         this.alg = alg || 'RS256'
         this.iss = iss
