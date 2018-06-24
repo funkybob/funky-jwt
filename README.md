@@ -143,17 +143,8 @@ Converts 'v' from a String to a Uint8Array.
 
 Converts 'v' from a Uint8Array to a String
 
-# class verifier({ alg, iss, aud })
-
-Construct a token verifier.
-
-## async setSecret(secret)
-
-Sets the secret for this verifier.
-
-## async setKeys(keys)
-
-Sets the map of (kid -> JWK) for this verifier.
+verifier
+--------
 
 ## decode(token)
 
@@ -165,15 +156,21 @@ Decodes a JWT string into an Object:
  - parts : the token split by '.'
  - token : the original token string
 
-## async isValid(jwt)
+## async isValid(jwt, {alg, iss, aud, secret, keys})
+
+ - alg: signature algorithm
+ - aud: audience (Optional)
+ - iss: issuer (Optional)
+ - secret: secret for HS* algorithms
+ - keys: map of {kid: jwt} for RS* algorithms
 
 Check if a jwt is valid.
 
  - verifies header.typ is 'JWT'
  - verifies the algorithm matches what we accept.
  - verifies the signature matches
- - if an "iss" is specified on the verifier, verify it matches.
- - if an "aud" is specified on the verifier, verify it matches.
+ - if an "iss" is specified, verify it matches.
+ - if an "aud" is specified, verify it matches.
  - if the token claims an "exp", ensure it's after now.
  - if the token claims a "nbf", ensure it's before now.
 

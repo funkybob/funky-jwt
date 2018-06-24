@@ -1,9 +1,6 @@
 import {JWT} from "./verify.js"
-import {verifier} from "./verifier.js"
+import {decode, verify} from "./verifier.js"
 
-// New API
-let ver = new verifier({ alg: 'HS256' })
-ver.setSecret('qwertyuiopasdfghjklzxcvbnm123456')
 
 document.querySelector('button').addEventListener('click', ev => {
 
@@ -17,11 +14,12 @@ document.querySelector('button').addEventListener('click', ev => {
   })
   old.isValid().then(result => target.innerHTML = target.innerHTML + result)
 
-  let jwt = ver.decode(token)
-  ver.isValid(jwt).then(result => target.innerHTML = target.innerHTML + result)
+  let jwt = decode(token)
+  verify(jwt, {
+    alg: 'HS256',
+    secret: 'qwertyuiopasdfghjklzxcvbnm123456'
+  }).then(result => target.innerHTML = target.innerHTML + result)
 
 })
 
 document.querySelector('label').innerHTML = 'Paste JWT here'
-
-console.log('READY')
