@@ -1,5 +1,5 @@
 /**
- * @desc Fetch JWK ket matter from a well-known URL.
+ * @desc Fetch JWK key matter from a well-known URL.
  * @see https://tools.ietf.org/html/rfc7517
  * @param {String} hostname
  * @returns {Promise<Object>}
