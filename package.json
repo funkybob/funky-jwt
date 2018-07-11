@@ -2,9 +2,14 @@
   "name": "@funkybob/jwt",
   "version": "2.0.0",
   "description": "Native JWT validation without deps",
-  "browser": "index.js",
+  "module": "dist/index.js",
+  "files": [
+    "src/*",
+    "dist/*"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "rollup -c"
   },
   "repository": {
     "type": "git",
@@ -18,13 +23,19 @@
   "homepage": "https://github.com/funkybob/funky-jwt#readme",
   "devDependencies": {
     "esdoc": "^1.1.0",
-    "esdoc-standard-plugin": "^1.0.0"
+    "esdoc-standard-plugin": "^1.0.0",
+    "rollup": "^0.62.0",
+    "rollup-plugin-babel-minify": "^5.0.0",
+    "rollup-plugin-buble": "^0.19.2"
   },
   "esdoc": {
     "source": "./src",
     "destination": "./docs",
     "plugins": [
-      {"name": "esdoc-standard-plugin"}
+      {
+        "name": "esdoc-standard-plugin"
+      }
     ]
-  }
+  },
+  "dependencies": {}
 }
