@@ -2,6 +2,7 @@
   "name": "@funkybob/jwt",
   "version": "2.0.0",
   "description": "Native JWT validation without deps",
+  "main": "dist/index.js",
   "module": "dist/index.js",
   "files": [
     "src/*",
