@@ -2,7 +2,7 @@
  * @desc Decodes a string using base64(url)
  * @param {String} v
  * @return {String}
-*/
+ */
 export function b64d (v) {
     switch(v.length % 4) {
         case 3: v = v + '='; break;

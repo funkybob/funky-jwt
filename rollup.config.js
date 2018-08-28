@@ -1,15 +1,19 @@
-import buble from 'rollup-plugin-buble';
-import minify from 'rollup-plugin-babel-minify';
+import { terser } from "rollup-plugin-terser";
 
 export default {
         input: 'index.js',
 	output: {
 		sourcemap: true,
-		format: 'es',
+		format: 'esm',
 		file: 'dist/index.js'
 	},
 	plugins: [
-		buble(),
-		minify({comments: false})
+		terser({
+			module: true,
+			nameCache: {},
+			output: {
+				beautify: true
+			}
+		})
 	]
 }
