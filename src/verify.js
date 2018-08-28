@@ -2,8 +2,6 @@
 import { b64d, str2bytes } from "./util.js"
 import { algoParams, importKey } from "./crypto.js"
 
-let encoder = new TextEncoder('utf-8');
-
 /**
  * @desc Parse and decode a JWT
  * @param {String} token
@@ -36,6 +34,7 @@ export async function verify(jwt, { alg, iss, aud, secret, keys }) {
     if (jwt.header.typ !== 'JWT') throw new Error("Not a JWT")
     if (jwt.header.alg !== alg) throw new Error("Unsupported algorithm")
 
+    let encoder = new TextEncoder('utf-8');
     let key
     let content = jwt.parts.splice(0, 2).join('.');
     switch (alg) {
