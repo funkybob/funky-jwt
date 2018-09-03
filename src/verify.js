@@ -34,7 +34,7 @@ export async function verify(jwt, { alg, iss, aud, secret, keys }) {
     if (jwt.header.typ !== 'JWT') throw new Error("Not a JWT")
     if (jwt.header.alg !== alg) throw new Error("Unsupported algorithm")
 
-    let encoder = new TextEncoder('utf-8');
+    let encoder = new TextEncoder();
     let key
     let content = jwt.parts.splice(0, 2).join('.');
     switch (alg) {
