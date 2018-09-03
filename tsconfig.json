@@ -2,6 +2,7 @@
 	"compilerOptions": {
 		"noImplicitAny": true,
 		"strict": true,
-		"lib": ["ES2015", "WebWorker", "DOM", "ES2016.Array.Include"]
+		"lib": ["ES2015", "WebWorker", "DOM", "ES2016.Array.Include"],
+		"target": "esnext"
 	}
 }
