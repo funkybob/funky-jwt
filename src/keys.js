@@ -10,7 +10,7 @@ export function fetchKeys (hostname) {
         .then(resp => resp.json())
         .then(data => {
             return data.keys.reduce((acc, val) => {
-                acc[val.kid] = val;
+                (val.kid) && (acc[val.kid] = val);
                 return acc;
             }, {})
         })
