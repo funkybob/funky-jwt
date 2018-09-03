@@ -1,10 +1,10 @@
 
 /**
  * @desc Decodes a string using base64(url)
- * @param {String} v
- * @return {String}
+ * @param {string} v
+ * @return {string}
  */
-export function b64d (v) {
+export function b64d (v : string) : string {
     switch(v.length % 4) {
         case 3: v = v + '='; break;
         case 2: v = v + '=='; break;
@@ -15,27 +15,27 @@ export function b64d (v) {
 
 /**
  * @desc Encodes a string using base64(url)
- * @param {String} v
- * @return {String}
+ * @param {string} v
+ * @return {string}
  */
-export function b64e (v) {
+export function b64e (v : string) : string {
    return btoa(v).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
 
 /**
  * @desc Convert a String to an array of bytes
- * @param {String} v
+ * @param {string} v
  * @return {Uint8Array}
  */
-export function str2bytes (v) {
+export function str2bytes (v : string) : Uint8Array {
    return Uint8Array.from(v.split('').map(x => x.charCodeAt(0)))
 }
 
 /**
  * @desc Convert an array of bytes to a String
  * @param {Uint8Array} v
- * @return {String}
+ * @return {string}
  */
-export function bytes2str (v) {
-   return Array.from(v).map( x => String.fromCharCode(x) ).join('')
+export function bytes2str (v : Uint8Array) : string {
+   return Array.from(v).map((x) => String.fromCharCode(x)).join('')
 }

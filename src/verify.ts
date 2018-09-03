@@ -1,13 +1,37 @@
 
-import { b64d, str2bytes } from "./util.js"
-import { algoParams, importKey } from "./crypto.js"
+import { b64d, str2bytes } from "./util"
+import { algoParams, importKey } from "./crypto"
+
+import {KeyMap} from './keys'
+
+interface JOSEHeader {
+    alg: string;
+    typ: string;
+    kid: string;
+}
+
+interface JWTClaims {
+    iss?: string;
+    sub?: string;
+    aud?: string|Array<string>;
+    exp?: Number;
+    nbf?: Number;
+    iat?: Number;
+}
+
+interface JsonWebToken {
+    header: JOSEHeader;
+    claims: JWTClaims;
+    parts: string[];
+    signature: string;
+}
 
 /**
  * @desc Parse and decode a JWT
- * @param {String} token
- * @returns {Object} jwt
+ * @param {string} token
+ * @returns {Object} JsonWebToken
  */
-export function decode(token) {
+export function decode(token : string) {
     let parts = token.split('.')
     let [header, claims, signature] = parts.map(b64d);
     return {
@@ -30,7 +54,10 @@ export function decode(token) {
  * @returns {Boolean}
  * @throws {Error}
  */
-export async function verify(jwt, { alg, iss, aud, secret, keys }) {
+export async function verify(
+    jwt : JsonWebToken,
+    { alg, iss, aud, secret, keys }: { alg: string, iss: string, aud: string, secret: string, keys: KeyMap }
+    ) : Promise<Boolean> {
     if (jwt.header.typ !== 'JWT') throw new Error("Not a JWT")
     if (jwt.header.alg !== alg) throw new Error("Unsupported algorithm")
 
@@ -53,7 +80,7 @@ export async function verify(jwt, { alg, iss, aud, secret, keys }) {
         default:
             throw new Error("Unknown algorithm")
     }
-    let valid = await crypto.subtle.verify(algoParams[alg], key, str2bytes(jwt.signature), encoder.encode(content))
+    let valid = await window.crypto.subtle.verify(algoParams[alg], key, str2bytes(jwt.signature), encoder.encode(content))
     if (!valid) throw new Error("Invalid signature")
 
     if (iss && iss !== jwt.claims.iss)

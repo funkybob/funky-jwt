@@ -29,7 +29,9 @@
     "esdoc": "^1.1.0",
     "esdoc-standard-plugin": "^1.0.0",
     "rollup": "^0.65.0",
-    "rollup-plugin-terser": "^2.0.2"
+    "rollup-plugin-terser": "^2.0.2",
+    "rollup-plugin-typescript2": "^0.17.0",
+    "typescript": "^3.0.3"
   },
   "esdoc": {
     "source": "./src",

@@ -1,4 +1,10 @@
-export const algoParams = {
+interface algoParamType {
+    name : string;
+    hash: string;
+    length? : Number;
+}
+
+export const algoParams : { [key: string] : algoParamType } = {
     'HS256': {name: 'HMAC', hash: 'SHA-256', length: 256},
     'HS384': {name: 'HMAC', hash: 'SHA-384', length: 384},
     'HS512': {name: 'HMAC', hash: 'SHA-512', length: 512},
@@ -9,11 +15,11 @@ export const algoParams = {
 
 /**
  * @desc Load key matter as a CryptoKey object, suitable for the supplied algorithm.
- * @param {String} alg - JWT Algorithm type.
- * @param {String|Object} key - Key matter
+ * @param {string} alg - JWT Algorithm type.
+ * @param {JsonWebKey|Uint8Array} key - Key matter
  * @returns {CryptoKey}
  */
-export function importKey (alg, key) {
+export function importKey (alg : string, key : JsonWebKey|Uint8Array) : PromiseLike<CryptoKey> {
     let keyFmt = (alg.slice(0, 2) === 'HS') ? 'raw' : 'jwk'
-    return crypto.subtle.importKey(keyFmt, key, algoParams[alg], false, ['verify']);
+    return window.crypto.subtle.importKey(keyFmt, key, algoParams[alg], false, ['verify']);
 }
