@@ -26,6 +26,14 @@ interface JsonWebToken {
     signature: string;
 }
 
+interface verifyOptions {
+    alg: string;
+    iss: string;
+    aud: string;
+    secret: string;
+    keys: KeyMap;
+}
+
 /**
  * @desc Parse and decode a JWT
  * @param {string} token
@@ -54,10 +62,7 @@ export function decode(token : string) {
  * @returns {Boolean}
  * @throws {Error}
  */
-export async function verify(
-    jwt : JsonWebToken,
-    { alg, iss, aud, secret, keys }: { alg: string, iss: string, aud: string, secret: string, keys: KeyMap }
-    ) : Promise<Boolean> {
+export async function verify(jwt : JsonWebToken, { alg, iss, aud, secret, keys }: verifyOptions) : Promise<Boolean> {
     if (jwt.header.typ !== 'JWT') throw new Error("Not a JWT")
     if (jwt.header.alg !== alg) throw new Error("Unsupported algorithm")
 
