@@ -1,28 +1,9 @@
-/* Override this until https://github.com/Microsoft/TypeScript/issues/26854 is fixed. */
-interface JsonWebKey {
-    alg?: string;
-    crv?: string;
-    d?: string;
-    dp?: string;
-    dq?: string;
-    e?: string;
-    ext?: boolean;
-    k?: string;
-    key_ops?: string[];
+interface FetchedJsonWebKey extends JsonWebKey {
     kid?: string;
-    kty?: string;
-    n?: string;
-    // oth?: RsaOtherPrimesInfo[];
-    p?: string;
-    q?: string;
-    qi?: string;
-    use?: string;
-    x?: string;
-    y?: string;
 }
 
 export interface KeyMap {
-    [key: string]: JsonWebKey;
+    [key: string]: FetchedJsonWebKey;
 }
 
 /**
@@ -35,7 +16,7 @@ export function fetchKeys (hostname : string) {
     return fetch(`https://${hostname}/.well-known/jwks.json`)
         .then(resp => resp.json())
         .then(data => {
-            return data.keys.reduce((acc : KeyMap, val : JsonWebKey) => {
+            return data.keys.reduce((acc : KeyMap, val : FetchedJsonWebKey) => {
                 (val.kid) && (acc[val.kid] = val);
                 return acc;
             }, {})
