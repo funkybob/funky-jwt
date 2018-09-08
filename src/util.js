@@ -37,5 +37,5 @@ export function str2bytes (v) {
  * @return {String}
  */
 export function bytes2str (v) {
-   return v.map(x => String.fromCharCode(x)).join('')
+   return Array.from(v).map( x => String.fromCharCode(x) ).join('')
 }
