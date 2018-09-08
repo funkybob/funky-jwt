@@ -1,4 +1,4 @@
-import {decode, verify} from "./verify.js"
+import {decode, verify} from "./src/verify.js"
 
 
 const config = {
