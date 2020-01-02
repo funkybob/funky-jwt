@@ -25,11 +25,11 @@
   },
   "homepage": "https://github.com/funkybob/funky-jwt#readme",
   "devDependencies": {
-    "agadoo": "^1.0.0",
+    "agadoo": "^2.0.0",
     "esdoc": "^1.1.0",
     "esdoc-standard-plugin": "^1.0.0",
-    "rollup": "^0.65.0",
-    "rollup-plugin-terser": "^2.0.2"
+    "rollup": "^1.27.14",
+    "rollup-plugin-terser": "^5.1.3"
   },
   "esdoc": {
     "source": "./src",
