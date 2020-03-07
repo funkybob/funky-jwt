@@ -45,7 +45,7 @@ export function b64e (v) {
  * @return {Uint8Array}
  */
 export function str2bytes (v) {
-   return Uint8Array.from(v.split('').map(x => x.charCodeAt(0)))
+   return Uint8Array.from(v.split(''), x => x.charCodeAt(0))
 }
 
 /**
@@ -55,5 +55,5 @@ export function str2bytes (v) {
  * @return {String}
  */
 export function bytes2str (v) {
-   return Array.from(v).map( x => String.fromCharCode(x) ).join('')
+   return Array.from(v, x => String.fromCharCode(x)).join('')
 }
