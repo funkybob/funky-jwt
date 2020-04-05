@@ -28,8 +28,8 @@
     "agadoo": "^2.0.0",
     "esdoc": "^1.1.0",
     "esdoc-standard-plugin": "^1.0.0",
-    "rollup": "^2.0.0",
-    "rollup-plugin-terser": "^5.2.0"
+    "rollup": "^2.3.3",
+    "rollup-plugin-terser": "^5.3.0"
   },
   "esdoc": {
     "source": "./src",
